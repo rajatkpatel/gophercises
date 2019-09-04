@@ -53,15 +53,6 @@ func TestDecryptStream(t *testing.T) {
 	}
 }
 
-// var encryptWriterInput = []struct {
-// 	testCase    string
-// 	inputKey    string
-// 	expectedErr error
-// }{
-// 	{testCase: "tc1", inputKey: "key123", expectedErr: nil},
-// 	{testCase: "tc2", inputKey: "key123", expectedErr: nil},
-// }
-
 func TestEncryptWriter(t *testing.T) {
 	tempIoReadFull := ioReadFullVar
 	file, err := os.OpenFile("test_secret_file", os.O_RDWR|os.O_CREATE, 0755)
