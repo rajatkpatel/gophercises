@@ -33,8 +33,3 @@ func TestInitDB(t *testing.T) {
 		assert.Equalf(t, item.expectedError, boolOutput, "%s db connection provide error: %v", DB_NAME, boolOutput)
 	}
 }
-
-// func TestMain(m *testing.M) {
-// 	m.Run()
-
-// }
