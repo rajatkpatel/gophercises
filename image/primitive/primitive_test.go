@@ -31,7 +31,7 @@ var createTempFileInput = []struct {
 }{
 	{[]string{"fine", "txt"}, false},
 	{[]string{"create_failed", "/"}, true},
-	{[]string{"/garbage/", "/"}, true},
+	{[]string{"/+/", "/"}, true},
 }
 
 func TestCreateTempFile(t *testing.T) {
@@ -68,10 +68,12 @@ var transformInput = []struct {
 	{"tc3", []string{"invalid_img_input.png", "/"}, true},
 	{"tc4", []string{"invalid_img_input.png", "png"}, true},
 	{"tc5", []string{"../temp/test_input.png", "png"}, true},
+	{"tc6", []string{"invalid_img_input.png", "png"}, true},
 }
 
 func TestTransform(t *testing.T) {
 	tempIoCopyVar := ioCopyVar
+	tempCreateTempFileVar := createTempFileVar
 	for _, item := range transformInput {
 		imgFile, err := os.OpenFile(item.input[0], os.O_RDWR|os.O_CREATE, 0666)
 		if err != nil {
@@ -90,8 +92,18 @@ func TestTransform(t *testing.T) {
 				return io.Copy(dst, src)
 			}
 		}
-		Transform(imgFile, item.input[1], 10, WithMode(ModeCombo))
+		if item.testCase == "tc6" {
+			createTempFileVar = func(name, ext string) (*os.File, error) {
+				createTempFileVar = func(name, ext string) (*os.File, error) {
+					return nil, errors.New("Temp file failed to create")
+				}
+				return createTempFile(name, ext)
+			}
+		}
+		_, err = Transform(imgFile, item.input[1], 10, WithMode(ModeCombo))
+		assert.Equalf(t, item.isError, err != nil, "Expected %v got %v", item.isError, err != nil)
 		ioCopyVar = tempIoCopyVar
+		createTempFileVar = tempCreateTempFileVar
 		imgFile.Close()
 
 		if item.input[0] == "invalid_img_input.png" {

@@ -10,6 +10,9 @@ import (
 	"github.com/gophercises/image/primitive"
 )
 
+var tplExecuteBool = false
+
+//renderShapeChoices execute a set of shapes in a different html template.
 func renderShapeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSeeker, ext string, mode primitive.Mode) {
 	options := []generateOptions{
 		{N: 10, M: mode},
@@ -50,11 +53,12 @@ func renderShapeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSeeker
 	}
 
 	err = tpl.Execute(w, data)
-	if err != nil {
+	if err != nil || tplExecuteBool {
 		log.Println("Template execution failed: ", err)
 	}
 }
 
+//renderModeChoices execute a set of primitive Modes in a different html template.
 func renderModeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSeeker, ext string) {
 	options := []generateOptions{
 		{N: 20, M: primitive.ModeCircle},
@@ -93,7 +97,7 @@ func renderModeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSeeker,
 	}
 
 	err = tpl.Execute(w, data)
-	if err != nil {
+	if err != nil || tplExecuteBool {
 		log.Println("Template execution failed: ", err)
 	}
 }

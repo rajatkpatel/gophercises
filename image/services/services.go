@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,11 +12,15 @@ import (
 	"github.com/gophercises/image/primitive"
 )
 
+var createTempFileVar = createTempFile
+
 type generateOptions struct {
 	N int
 	M primitive.Mode
 }
 
+//IndexHandler is the handler for the index page.
+//It will display the html layout only.
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	html := `<html>
 				<body>
@@ -30,6 +33,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, html)
 }
 
+//ModifyHandler is the handler for image modify.
+//It will display different images after the modification has been done.
 func ModifyHandler(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("./img/" + filepath.Base(r.URL.Path))
 	if err != nil {
@@ -64,9 +69,10 @@ func ModifyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	_ = shape
 	http.Redirect(w, r, "/img/"+filepath.Base(file.Name()), http.StatusFound)
-
 }
 
+//UploadHandler is the handler for uploading a file.
+//It will redirect to modify after successful upload of a file.
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	file, header, err := r.FormFile("image")
 	if err != nil {
@@ -77,14 +83,14 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	ext := filepath.Ext(header.Filename)[1:]
-	onDiskFile, err := createTempFile("", ext)
+	onDiskFile, err := createTempFileVar("", ext)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer onDiskFile.Close()
 
-	_, err = io.Copy(onDiskFile, file)
+	_, err = ioCopyVar(onDiskFile, file)
 	if err != nil {
 		log.Println("Failed to copy:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -94,6 +100,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/modify/"+filepath.Base(onDiskFile.Name()), http.StatusFound)
 }
 
+//createTempFile generates a temporary file.
 func createTempFile(name, ext string) (*os.File, error) {
 	tFile, err := ioutil.TempFile("./img/", name)
 	if err != nil {
