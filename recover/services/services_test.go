@@ -30,19 +30,19 @@ func TestPanichandler(t *testing.T) {
 
 }
 
-func TestSourceCodeHandlerNeg(t *testing.T) {
+func TestSourceCodeHandler(t *testing.T) {
 	var sourceCodeHandlerInput = []struct {
 		testCase       string
-		inputUrl       string
+		inputURL       string
 		expectedStatus int
 	}{
-		{"successful", "/debug?line=24&path=c:/go/src/runtime/debug/stack.go", 200},
-		{"file_unavailable", "/debug?path=C:/Users/GS-1837/go/src/github.com/gophercises/recover/main1.go", 500},
+		{"successful", "/debug?line=24&path=/usr/local/go/src/runtime/debug/stack.go", 200},
+		{"file_unavailable", "/debug?path=/home/rajat/go/src/github.com/gophercises/recover/main1.go", 500},
 		{"file_unavailable", "/debug", 500},
-		{"successful", "/debug?line=24&path=C:/Users/GS-1837/go/src/github.com/gophercises/recover/main.go", 200},
-		{"io_copy_error", "/debug?line=2&path=c:/go/src/runtime/debug/stack.go", 500},
-		{"successful", "/debug?line=2&path=C:/Users/GS-1837/go/src/github.com/gophercises/recover/main.go", 200},
-		{"lexer_tokenisation_error", "/debug?line=3&path=c:/go/src/runtime/debug/stack.go", 500},
+		{"successful", "/debug?line=24&path=/home/rajat/go/src/github.com/gophercises/recover/main.go", 200},
+		{"io_copy_error", "/debug?line=2&path=/usr/local/go/src/runtime/debug/stack.go", 500},
+		{"successful", "/debug?line=2&path=/home/rajat/go/src/github.com/gophercises/recover/main.go", 200},
+		{"lexer_tokenisation_error", "/debug?line=3&path=/usr/local/go/src/runtime/debug/stack.go", 500},
 	}
 
 	tempIoCopy := IoCopy
@@ -61,7 +61,7 @@ func TestSourceCodeHandlerNeg(t *testing.T) {
 			}
 		}
 
-		req, err := http.NewRequest("GET", item.inputUrl, nil)
+		req, err := http.NewRequest("GET", item.inputURL, nil)
 		if err != nil {
 			t.Error("Error occured while testing: ", err)
 		}

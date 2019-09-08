@@ -10,7 +10,8 @@ import (
 	"github.com/gophercises/task/dbconnect"
 )
 
-var DB_NAME = "tasksCmd.db"
+//DbName variable store the database name of task command prompt.
+var DbName = "tasksCmd.db"
 
 func main() {
 	initDB()
@@ -18,7 +19,7 @@ func main() {
 
 func initDB() error {
 	dir, _ := homedir.Dir()
-	dbPath := filepath.Join(dir, DB_NAME)
+	dbPath := filepath.Join(dir, DbName)
 	err := dbconnect.Init(dbPath)
 	if err != nil {
 		return err

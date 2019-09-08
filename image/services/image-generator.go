@@ -7,6 +7,7 @@ import (
 	"github.com/gophercises/image/primitive"
 )
 
+//Variables declared globally.
 var (
 	TempName  = ""
 	ioCopyVar = io.Copy

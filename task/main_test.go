@@ -27,9 +27,9 @@ func TestInitDB(t *testing.T) {
 		}
 	}()
 	for _, item := range dbConnections {
-		DB_NAME = item.input
+		DbName = item.input
 		output := initDB()
 		boolOutput := output != nil
-		assert.Equalf(t, item.expectedError, boolOutput, "%s db connection provide error: %v", DB_NAME, boolOutput)
+		assert.Equalf(t, item.expectedError, boolOutput, "%s db connection provide error: %v", DbName, boolOutput)
 	}
 }

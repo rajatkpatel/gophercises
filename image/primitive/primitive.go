@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+//Mode is of type int.
+//It is used for primitive modes.
 type Mode int
 
 //const below are of type Mode which is basically a number map to a Mode name.

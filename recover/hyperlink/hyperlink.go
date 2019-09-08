@@ -2,12 +2,7 @@ package hyperlink
 
 import (
 	"net/url"
-	"runtime"
 	"strings"
-)
-
-var (
-	osName = runtime.GOOS
 )
 
 //CreateLinks take a string parameter i.e. stacktrace.
@@ -22,20 +17,10 @@ func CreateLinks(stack string) string {
 		}
 
 		fileName := ""
-		counter := 0
 		for i, ch := range line {
-			if ch == ':' {
-				counter++
-				if osName == "windows" {
-					if counter == 2 {
-						fileName = line[1:i]
-						break
-					}
-				} else {
-					fileName = line[1:i]
-					break
-				}
-
+			if ch == ':' && line[i+1] != '/' {
+				fileName = line[1:i]
+				break
 			}
 		}
 		var lineNo strings.Builder

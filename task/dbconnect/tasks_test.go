@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	bucketErr = errors.New("Bucket not found")
-	dbOpenErr = errors.New("database not open")
+	errBucket = errors.New("Bucket not found")
+	errDbOpen = errors.New("database not open")
 )
 
 var DbConnections = []struct {
@@ -32,9 +32,9 @@ var DbCreateTask = []struct {
 	expected error
 }{
 	{"task1", nil},
-	{"dbClosed", dbOpenErr},
+	{"dbClosed", errDbOpen},
 	{"task2", nil},
-	{"bucketUnavailable", bucketErr},
+	{"bucketUnavailable", errBucket},
 	{"task3", nil},
 }
 
@@ -42,9 +42,9 @@ var DbAllTask = []struct {
 	expected error
 }{
 	{nil},
-	{dbOpenErr},
+	{errDbOpen},
 	{nil},
-	{bucketErr},
+	{errBucket},
 	{nil},
 }
 
@@ -53,9 +53,9 @@ var DbDeleteTask = []struct {
 	expected error
 }{
 	{1, nil},
-	{2, dbOpenErr},
+	{2, errDbOpen},
 	{3, nil},
-	{1, bucketErr},
+	{1, errBucket},
 	{2, nil},
 }
 
@@ -101,10 +101,10 @@ func TestCloseDB(t *testing.T) {
 
 func TestCreateTask(t *testing.T) {
 	for _, item := range DbCreateTask {
-		if item.expected != dbOpenErr {
+		if item.expected != errDbOpen {
 			setDbPath()
 		}
-		if item.expected == bucketErr {
+		if item.expected == errBucket {
 			taskBucket = []byte{}
 		} else {
 			taskBucket = []byte("tasks")
@@ -118,10 +118,10 @@ func TestCreateTask(t *testing.T) {
 
 func TestAllTasks(t *testing.T) {
 	for _, item := range DbAllTask {
-		if item.expected != dbOpenErr {
+		if item.expected != errDbOpen {
 			setDbPath()
 		}
-		if item.expected == bucketErr {
+		if item.expected == errBucket {
 			taskBucket = []byte{}
 		} else {
 			taskBucket = []byte("tasks")
@@ -134,10 +134,10 @@ func TestAllTasks(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 	for _, item := range DbDeleteTask {
-		if item.expected != dbOpenErr {
+		if item.expected != errDbOpen {
 			setDbPath()
 		}
-		if item.expected == bucketErr {
+		if item.expected == errBucket {
 			taskBucket = []byte{}
 		} else {
 			taskBucket = []byte("tasks")

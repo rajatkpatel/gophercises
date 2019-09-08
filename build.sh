@@ -37,10 +37,6 @@ printf "${GREEN}=                                                               
 printf "${GREEN}====================================================================================================${NC}\n"
 printf "${GREEN}====================================================================================================${NC}\n"
 printf "${GREEN}====================================================================================================${NC}\n"
-cd recover
-CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-cd ..
-
 cd task
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 cd ..
@@ -49,6 +45,11 @@ cd recover
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 cd ..
 
+cd secret
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cli
+cd ..
+
 cd image
+go get -u github.com/fogleman/primitive
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 cd ..

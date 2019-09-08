@@ -48,22 +48,22 @@ func CloseDB() {
 //If successfully added then it will return the id of that task
 //otherwise return -1 with the error
 func CreateTask(task string) (int, error) {
-	var taskId int
+	var taskID int
 	err := db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(taskBucket)
 		if b == nil {
 			return errors.New("Bucket not found")
 		}
-		taskId64, _ := b.NextSequence()
-		taskId = int(taskId64)
-		key := itob(taskId)
+		taskID64, _ := b.NextSequence()
+		taskID = int(taskID64)
+		key := itob(taskID)
 		return b.Put(key, []byte(task))
 	})
 	if err != nil {
 		log.Println("Read-write transaction Failed: ", err)
 		return -1, err
 	}
-	return taskId, nil
+	return taskID, nil
 }
 
 //AllTasks return the list of tasks present in the Bucket

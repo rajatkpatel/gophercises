@@ -45,16 +45,16 @@ func TestSave(t *testing.T) {
 	filePath := setSecretsPath("test_secrets")
 	v := File(encodingKey, filePath)
 	err := v.save()
-	assert.Equalf(t, nil, err, "expected %v got %v", nil, err)
+	assert.Equalf(t, false, err != nil, "expected %v got %v", false, err != nil)
 
 	setEncryptWriter()
 	err = v.save()
-	assert.Equalf(t, "Encrypt Writer failed", err.Error(), "expected %v got %v", "Encrypt Writer failed", err.Error())
+	assert.Equalf(t, true, err != nil, "expected %v got %v", true, err != nil)
 	EncryptWriterVar = tempEncryptWriter
 
 	val := File(encodingKey, "")
 	err = val.save()
-	assert.Equalf(t, "open : The system cannot find the file specified.", err.Error(), "expected %v got %v", "open : The system cannot find the file specified.", err.Error())
+	assert.Equalf(t, true, err != nil, "expected %v got %v", true, err != nil)
 }
 
 func TestLoad(t *testing.T) {
@@ -73,21 +73,6 @@ func TestLoad(t *testing.T) {
 	err = val.load()
 	assert.Equalf(t, nil, err, "expected %v got %v", nil, err)
 }
-
-// var (
-// 	decryptErr = errors.New("Decrypt reader failed")
-// 	encryptErr = errors.New("Encrypt Writer failed")
-// 	noValueErr = errors.New("Vault has no value for the key provided")
-// )
-
-// var setInput = []struct {
-// 	input       []string
-// 	expectedErr error
-// }{
-// 	{[]string{"test_google_key", "test_asdf"}, nil},
-// 	{[]string{"test_decrypt_err", "decrypt_msg"}, decryptErr},
-// 	{[]string{"test_encrypt_err", "encrypt_msg"}, encryptErr},
-// }
 
 func TestSet(t *testing.T) {
 	filePath := setSecretsPath("test_secrets")

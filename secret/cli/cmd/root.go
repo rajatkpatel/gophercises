@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+//SecretFile variable declared globally.
 var SecretFile = ".secrets"
 
 //RootCmd is the initial command.

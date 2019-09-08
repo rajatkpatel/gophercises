@@ -13,6 +13,7 @@ import (
 	"github.com/alecthomas/chroma/styles"
 )
 
+//Variables declared globally.
 var (
 	IoCopy        = io.Copy
 	lexer         = lexers.Get("go")

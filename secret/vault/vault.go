@@ -11,6 +11,8 @@ import (
 	"github.com/gophercises/secret/crypt"
 )
 
+//Vault is of type struct.
+//It consist of encoding key, file path of the vault, mutex, key values.
 type Vault struct {
 	encodingKey string
 	keyValues   map[string]string
@@ -27,6 +29,7 @@ func File(encodingKey, filePath string) *Vault {
 	}
 }
 
+//Variables declared globally.
 var (
 	DecryptReaderVar = crypt.DecryptReader
 	EncryptWriterVar = crypt.EncryptWriter
